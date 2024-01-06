@@ -38,6 +38,8 @@ async function chatgpt(username:string,message: string): Promise<string> {
   }catch (e:any) {
     if (e.request){
       console.log("请求出错");
+    }else{
+      throw e
     }
   }
   return assistantMessage;
