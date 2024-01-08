@@ -2,8 +2,9 @@ import { WechatyBuilder } from "wechaty";
 import QRCode from "qrcode";
 import { ChatGPTBot } from "./bot.js";
 import {config} from "./config.js";
+import {SparkDeskBot} from "./sparkdeskbot.js";
 const chatGPTBot = new ChatGPTBot();
-
+const sparkDeskBot = new SparkDeskBot()
 const bot =  WechatyBuilder.build({
   name: "wechat-assistant", // generate xxxx.memory-card.json and save login data for the next login
   puppet: "wechaty-puppet-wechat",
@@ -22,7 +23,7 @@ async function main() {
       );
     })
     .on("login", async (user) => {
-      chatGPTBot.setBotName(user.name());
+      sparkDeskBot.setBotName(user.name());
       console.log(`User ${user} logged in`);
       console.log(`私聊触发关键词: ${config.chatPrivateTriggerKeyword}`);
       console.log(`已设置 ${config.blockWords.length} 个聊天关键词屏蔽. ${config.blockWords}`);
@@ -37,7 +38,7 @@ async function main() {
         return;
       }
       try {
-        await chatGPTBot.onMessage(message);
+        await sparkDeskBot.onMessage(message);
       } catch (e) {
         console.error(e);
       }
