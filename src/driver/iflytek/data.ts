@@ -1,7 +1,7 @@
 import {ChatCompletionRequestMessage, ChatCompletionRequestMessageRoleEnum} from "openai";
-import {User} from "./driver/iflytek/user.js";
-import { sparkDeskConfig } from "./sparkdeskconfig.js";
-import {SparkDesk, TextValue} from "./driver/iflytek/index.js";
+import {User} from "./core/user.js";
+import { sparkDeskConfig } from "./config.js";
+import {SparkDesk, TextValue} from "./core/index.js";
 
 /**
  * 使用内存作为数据库

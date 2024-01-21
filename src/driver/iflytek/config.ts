@@ -1,6 +1,5 @@
 import * as dotenv from "dotenv";
-import {SparkDeskOption} from "./driver/iflytek";
-import {IConfig} from "./interface";
+import {SparkDeskOption} from "./core";
 
 dotenv.config();
 

@@ -1,10 +1,25 @@
-import { WechatyBuilder } from "wechaty";
+import {WechatyBuilder} from "wechaty";
 import QRCode from "qrcode";
-import { ChatGPTBot } from "./bot.js";
 import {config} from "./config.js";
-import {SparkDeskBot} from "./sparkdeskbot.js";
-const chatGPTBot = new ChatGPTBot();
-const sparkDeskBot = new SparkDeskBot()
+import {SparkDeskBot} from "./driver/iflytek/sparkdeskbot.js";
+import {ChatGPTBot} from "./driver/chatgpt/chatgptbot.js";
+import {DriverEnum} from "./enum/driver.js";
+import {BaseBot} from "./driver/basebot";
+
+let  messgageBot: BaseBot;
+
+
+switch (config.driver) {
+  case DriverEnum.openai:
+    messgageBot = new ChatGPTBot();
+    break;
+  case DriverEnum.iflytek:
+    messgageBot = new SparkDeskBot();
+    break;
+  default:
+    messgageBot = new ChatGPTBot();
+    break;
+}
 const bot =  WechatyBuilder.build({
   name: "wechat-assistant", // generate xxxx.memory-card.json and save login data for the next login
   puppet: "wechaty-puppet-wechat",
@@ -13,6 +28,7 @@ const bot =  WechatyBuilder.build({
   }
 });
 async function main() {
+
   const initializedAt = Date.now()
   bot
     .on("scan", async (qrcode, status) => {
@@ -23,11 +39,10 @@ async function main() {
       );
     })
     .on("login", async (user) => {
-      sparkDeskBot.setBotName(user.name());
+      messgageBot.setBotName(user.name());
       console.log(`User ${user} logged in`);
       console.log(`私聊触发关键词: ${config.chatPrivateTriggerKeyword}`);
       console.log(`已设置 ${config.blockWords.length} 个聊天关键词屏蔽. ${config.blockWords}`);
-      console.log(`已设置 api: ${config.api}`);
     })
     .on("message", async (message) => {
       if (message.date().getTime() < initializedAt) {
@@ -38,7 +53,7 @@ async function main() {
         return;
       }
       try {
-        await sparkDeskBot.onMessage(message);
+        await messgageBot.onMessage(message);
       } catch (e) {
         console.error(e);
       }

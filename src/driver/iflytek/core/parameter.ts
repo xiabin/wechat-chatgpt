@@ -1,4 +1,4 @@
-import {SparkDeskOption} from "./SparkDesk.js";
+import {SparkDeskOption} from "./SparkDesk";
 
 export type ParameterValue = {
     chat: {

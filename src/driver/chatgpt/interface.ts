@@ -1,6 +1,7 @@
 import {ChatCompletionRequestMessage} from "openai";
+import {Config} from "../../iterface/config";
 
-export interface IConfig {
+export interface IConfig extends Config{
   api?: string;
   openai_api_key: string;
   model: string;
